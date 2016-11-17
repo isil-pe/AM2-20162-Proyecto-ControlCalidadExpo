@@ -17,6 +17,9 @@ public class MyDatabase extends SQLiteOpenHelper {
     //Columnas de la Tabla Fundo
     public static final String KEY_IDPRODUCTOR = "idproductor";
     public static final String KEY_NOMBREPRODUCTOR = "nombreproductor";
+	public static final String KEY_ESTADOPRODUCTOR = "estadoproductor";
+	public static final String KEY_SINCROPRODUCTOR = "sincroproductor";
+
 
 	//Columnas de la Tabla Programa
 	public static final String KEY_IDPROGRAMA = "idprograma";
