@@ -2,5 +2,5 @@
 
 Miembros:
 
-Fabricio Arbulu
+Fabricio Arbulu,
 Marco Muñoz
