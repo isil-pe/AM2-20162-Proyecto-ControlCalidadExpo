@@ -1,0 +1,12 @@
+{
+  "lastLogin": 1465415881524,
+  "created": 1464809950000,
+  "name": "eduardo",
+  "___class": "Users",
+  "user-token": "BCA1F470-5472-408B-FFF6-DB4CACA4D300",
+  "ownerId": "D82B3021-9EC7-36B5-FFC2-859155CD0300",
+  "updated": null,
+  "email": "isil@qd.pe",
+  "objectId": "D82B3021-9EC7-36B5-FFC2-859155CD0300",
+  "__meta": "{\"relationRemovalIds\":{},\"selectedProperties\":[\"__updated__meta\",\"password\",\"created\",\"name\",\"___class\",\"ownerId\",\"updated\",\"email\",\"objectId\"],\"relatedObjects\":{}}"
+}
