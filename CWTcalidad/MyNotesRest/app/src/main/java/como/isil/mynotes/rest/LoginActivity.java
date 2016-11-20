@@ -15,9 +15,13 @@ import android.widget.TextView;
 
 import com.isil.mynotes.rest.R;
 
+import java.util.concurrent.ExecutionException;
+
 import como.isil.mynotes.rest.presenter.LogInPresenter;
 import como.isil.mynotes.rest.presenter.LogInView;
 import como.isil.mynotes.rest.storage.PreferencesHelper;
+
+import como.isil.mynotes.rest.utils.SyncCloud;
 
 
 public class LoginActivity extends ActionBarActivity implements LogInView {
@@ -29,6 +33,7 @@ public class LoginActivity extends ActionBarActivity implements LogInView {
     private String password;
     private View rlayLoading,container;
 
+
     private LogInPresenter logInPresenter;
 
     @Override
@@ -36,6 +41,10 @@ public class LoginActivity extends ActionBarActivity implements LogInView {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+      
+
+
 
         logInPresenter= new LogInPresenter();
         logInPresenter.attachedView(this);
@@ -48,6 +57,9 @@ public class LoginActivity extends ActionBarActivity implements LogInView {
         btnLogin=(Button)findViewById(R.id.btnLogin);
         rlayLoading=findViewById(R.id.rlayLoading);
         container=findViewById(R.id.container);
+
+
+
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -129,4 +141,6 @@ public class LoginActivity extends ActionBarActivity implements LogInView {
 
         snackbar.show();
     }
+
+
 }

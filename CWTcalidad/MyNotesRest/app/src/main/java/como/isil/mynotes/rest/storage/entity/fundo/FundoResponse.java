@@ -20,7 +20,24 @@ public class FundoResponse {
     private int idproductor;
     private String nombreproductor;
     private String objectId;
+    private String estado;
+    private String sincro;
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getSincro() {
+        return sincro;
+    }
+
+    public void setSincro(String sincro) {
+        this.sincro = sincro;
+    }
 
     public int getIdproductor() {
         return idproductor;

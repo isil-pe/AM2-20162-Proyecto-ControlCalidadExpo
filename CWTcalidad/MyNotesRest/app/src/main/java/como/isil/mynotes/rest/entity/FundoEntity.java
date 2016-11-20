@@ -29,10 +29,11 @@ public class FundoEntity  implements Serializable {
         this.estado = estado;
     }
 
-    public FundoEntity(int idproductor, String nombreproductor, String objectId) {
+    public FundoEntity(int idproductor, String nombreproductor, String estado, String sincro) {
         this.idproductor = idproductor;
         this.nombreproductor = nombreproductor;
-        this.objectId = objectId;
+        this.estado = estado;
+        this.sincro = sincro;
     }
 
     public FundoEntity(String nombreproductor, String estado, String sincro) {

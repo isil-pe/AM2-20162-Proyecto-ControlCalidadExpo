@@ -30,10 +30,12 @@ public class FundoPresenter {
         this.addFundoView =null;
     }
 
-    public void addFundo(int id, String nombre ){
+    public void addFundo(int id, String nombre, String estado, String sincro ){
         FundoRaw fundoRaw= new FundoRaw();
         fundoRaw.setIdproductor(id);
         fundoRaw.setNombreproductor(nombre);
+        fundoRaw.setEstado(estado);
+        fundoRaw.setSincro(sincro);
 
         addFundoView.showLoading();
         Call<FundoResponse> call = ApiClient.getMyApiClient().addFundo(fundoRaw);
@@ -67,6 +69,8 @@ public class FundoPresenter {
             fundoEntity.setObjectId(fundoResponse.getObjectId());
             fundoEntity.setIdproductor(fundoResponse.getIdproductor());
             fundoEntity.setNombreproductor(fundoResponse.getNombreproductor());
+            fundoEntity.setEstado(fundoResponse.getEstado());
+            fundoEntity.setSincro(fundoResponse.getSincro());
         }
         addFundoView.hideLoading();
         addFundoView.onAddFundoSuccess();

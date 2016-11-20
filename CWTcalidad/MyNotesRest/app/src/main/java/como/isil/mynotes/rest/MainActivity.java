@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import com.facebook.stetho.Stetho;
 import com.isil.mynotes.rest.R;
 
 
@@ -25,6 +26,8 @@ import como.isil.mynotes.rest.storage.PreferencesHelper;
 import como.isil.mynotes.rest.storage.db.CRUDOperations;
 import como.isil.mynotes.rest.storage.db.MyDatabase;
 import como.isil.mynotes.rest.utils.CapitalizeString;
+import como.isil.mynotes.rest.utils.OnSyncCload;
+import como.isil.mynotes.rest.utils.SyncCloud;
 import como.isil.mynotes.rest.view.adapters.FundoAdapter;
 
 import java.util.List;
@@ -32,14 +35,14 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity implements FundosView {
 
-    private static final String TAG ="MainActivity" ;
-    private static final int ACTION_ADD=1;
-    private static final int ACTION_DETAIL=2;
+    private static final String TAG = "MainActivity";
+    private static final int ACTION_ADD = 1;
+    private static final int ACTION_DETAIL = 2;
 
-    private TextView tviLogout,tviUser;
+    private TextView tviLogout, tviUser;
     private ListView lstFundos;
     private Button btnAddFundo;
-    private View rlayLoading,container;
+    private View rlayLoading, container;
     private List<FundoEntity> lsFundoEntities;
     private CRUDOperations crudOperations;
     private FundoAdapter fundoAdapter;
@@ -53,9 +56,15 @@ public class MainActivity extends ActionBarActivity implements FundosView {
         //populate();
         fundosPresenter = new FundosPresenter();
         fundosPresenter.attachedView(this);
+        Stetho.initializeWithDefaults(this);
         init();
+
+
+
+
         //loadData();
         //loadCloud();
+
     }
 
     private void loadCloud() {
@@ -63,19 +72,19 @@ public class MainActivity extends ActionBarActivity implements FundosView {
     }
 
     private void loadData() {
-        crudOperations= new CRUDOperations(new MyDatabase(this));
-        //lsFundoEntities= crudOperations.getAllNotes();
-       // fundoAdapter = new FundoAdapter(this,lsNoteEntities);
-      //  lstNotes.setAdapter(fundoAdapter);
+        crudOperations = new CRUDOperations(new MyDatabase(this));
+        lsFundoEntities= crudOperations.getAllFundosNoEliminados();
+         fundoAdapter = new FundoAdapter(this,lsFundoEntities);
+        lstFundos.setAdapter(fundoAdapter);
 
 
     }
 
     private void populate() {
 
-        CRUDOperations crudOperations= new CRUDOperations(new MyDatabase(this));
-       // crudOperations.addNote(new NoteEntity("Mi Nota","Esta es un nota ",null));
-       // crudOperations.addNote(new NoteEntity("Segunda Nota","Esta es la segunds nota ",null));
+        CRUDOperations crudOperations = new CRUDOperations(new MyDatabase(this));
+        // crudOperations.addNote(new NoteEntity("Mi Nota","Esta es un nota ",null));
+        // crudOperations.addNote(new NoteEntity("Segunda Nota","Esta es la segunds nota ",null));
         //crudOperations.addNote(new NoteEntity("Tercera Nota","Esta es la tercera nota ",null));
         //crudOperations.addNote(new NoteEntity("Cuarta Nota","Esta es la cuarta nota ",null));
         //crudOperations.addNote(new NoteEntity("Quinta Nota","Esta es la quinta nota ",null));
@@ -85,17 +94,16 @@ public class MainActivity extends ActionBarActivity implements FundosView {
     }
 
     private void init() {
-        tviLogout= (TextView)findViewById(R.id.tviLogout);
-        tviUser= (TextView)findViewById(R.id.tviUser);
-        lstFundos= (ListView)(findViewById(R.id.lstFundos));
-        btnAddFundo= (Button)(findViewById(R.id.btnAddFundo));
-        rlayLoading= (findViewById(R.id.rlayLoading));
+        tviLogout = (TextView) findViewById(R.id.tviLogout);
+        tviUser = (TextView) findViewById(R.id.tviUser);
+        lstFundos = (ListView) (findViewById(R.id.lstFundos));
+        btnAddFundo = (Button) (findViewById(R.id.btnAddFundo));
+        rlayLoading = (findViewById(R.id.rlayLoading));
 
         //user Info
         String username = PreferencesHelper.getUserSession(this);
-        if(username!=null)
-        {
-            tviUser.setText("Bienvenido "+ new CapitalizeString(username).first());
+        if (username != null) {
+            tviUser.setText("Bienvenido " + new CapitalizeString(username).first());
         }
 
         //events
@@ -123,13 +131,12 @@ public class MainActivity extends ActionBarActivity implements FundosView {
     }
 
     private void gotoFundo(int action, FundoEntity fundoEntity) {
-        Intent intent= new Intent(this,FundoActivity.class);
+        Intent intent = new Intent(this, FundoActivity.class);
 
-        switch (action)
-        {
+        switch (action) {
             case ACTION_ADD:
-                    intent.putExtra("FRAGMENT", FundoActivity.ADD_FUNDO);
-                    startActivity(intent);
+                intent.putExtra("FRAGMENT", FundoActivity.ADD_FUNDO);
+                startActivity(intent);
                 break;
             case ACTION_DETAIL:
                 intent.putExtra("FRAGMENT", FundoActivity.DETAIL_FUNDO);
@@ -149,8 +156,8 @@ public class MainActivity extends ActionBarActivity implements FundosView {
     protected void onResume() {
         super.onResume();
         Log.v(TAG, "onResumen");
-        //loadData();
-        loadCloud();
+        loadData();
+        //loadCloud();
     }
 
     @Override
@@ -182,15 +189,15 @@ public class MainActivity extends ActionBarActivity implements FundosView {
     @Override
     public void onMessageError(String message) {
         Snackbar snackbar = Snackbar
-                .make(container,message, Snackbar.LENGTH_LONG);
+                .make(container, message, Snackbar.LENGTH_LONG);
 
         snackbar.show();
     }
 
     @Override
     public void renderFundos(List<FundoEntity> fundos) {
-        lsFundoEntities= fundos;
-        fundoAdapter = new FundoAdapter(this,lsFundoEntities);
+        lsFundoEntities = fundos;
+        fundoAdapter = new FundoAdapter(this, lsFundoEntities);
         lstFundos.setAdapter(fundoAdapter);
     }
 }

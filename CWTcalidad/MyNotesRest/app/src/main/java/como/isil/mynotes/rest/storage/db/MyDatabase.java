@@ -43,8 +43,12 @@ public class MyDatabase extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
 		String sqlfundos= "CREATE TABLE " + TABLE_FUNDOS + "("
-                + KEY_IDPRODUCTOR + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + KEY_NOMBREPRODUCTOR + " TEXT"
-			+ ")";
+				+ KEY_IDPRODUCTOR + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ,"
+				+ KEY_NOMBREPRODUCTOR + " TEXT,"
+				+ KEY_ESTADOPRODUCTOR + " TEXT,"
+				+ KEY_SINCROPRODUCTOR + " TEXT"
+
+				+ ")";
 		db.execSQL(sqlfundos);
 
 		String sqlprograma= "CREATE TABLE " + TABLE_PROGRAMAS + "("

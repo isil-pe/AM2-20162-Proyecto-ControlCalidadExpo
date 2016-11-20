@@ -13,4 +13,8 @@ public interface AddFundoView {
 
     void onMessageError(String message);
     void onAddFundoSuccess();
+
+
+
+    public void onPostExecute(String result);
 }

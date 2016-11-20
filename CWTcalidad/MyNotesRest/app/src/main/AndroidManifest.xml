@@ -1,40 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.isil.mynotes.rest" >
+    package="com.isil.mynotes.rest">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_app"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name="como.isil.mynotes.rest.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
+
         </activity>
         <activity
             android:name="como.isil.mynotes.rest.SplashActivity"
             android:label="@string/title_activity_splash"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="como.isil.mynotes.rest.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="como.isil.mynotes.rest.FundoActivity"
+            android:label="@string/title_activity_note"
+            android:screenOrientation="portrait" />
+        <activity android:name="como.isil.mynotes.rest.PruebaActivity"></activity>
+        <activity android:name="como.isil.mynotes.rest.PrincipalActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NavAppTheme"
+            >
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="como.isil.mynotes.rest.LoginActivity"
-            android:label="@string/title_activity_login"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name="como.isil.mynotes.rest.FundoActivity"
-            android:label="@string/title_activity_note"
-            android:screenOrientation="portrait">
         </activity>
     </application>
 

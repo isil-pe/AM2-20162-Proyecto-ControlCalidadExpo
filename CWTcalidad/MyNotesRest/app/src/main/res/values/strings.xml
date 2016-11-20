@@ -1,18 +1,19 @@
 <resources>
-    <string name="app_name">MyNotes</string>
+    <string name="app_name">CWTCalidad</string>
 
     <string name="hello_world">MyNotes</string>
     <string name="action_settings">MyNotes</string>
-    <string name="title_activity_splash">MyNotes</string>
+    <string name="title_activity_splash">Calidad</string>
     <string name="my_note">Calidad</string>
-    <string name="title_activity_login">MyNotes</string>
+    <string name="title_activity_login">Calidad</string>
     <string name="logout">Cerrar sesi\u00F3n</string>
     <string name="esta_es_una_nota">Esta es un nota</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_note">NoteActivity</string>
-
+    <string name="closeDrawer">Navigation View</string>
+    <string name="openDrawer">Navigation View Closed</string>
     <!--
      á \u00E1
      é \u00E9

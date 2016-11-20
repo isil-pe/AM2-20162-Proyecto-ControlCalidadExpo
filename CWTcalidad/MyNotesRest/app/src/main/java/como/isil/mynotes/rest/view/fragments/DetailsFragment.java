@@ -2,7 +2,9 @@ package como.isil.mynotes.rest.view.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import com.isil.mynotes.rest.R;
 
 
 import como.isil.mynotes.rest.entity.FundoEntity;
+import como.isil.mynotes.rest.view.fragments.fundo.ListaFundoFragment;
 import como.isil.mynotes.rest.view.listeners.OnFundoListener;
 
 public class DetailsFragment extends Fragment {
@@ -107,14 +110,14 @@ public class DetailsFragment extends Fragment {
         btnDeleteFundo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // mListener.deleteFundo(fundoEntity);
+                mListener.deleteFundo(fundoEntity);
             }
         });
 
         btnEditFundo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //editNote();
+                editFundo();
             }
         });
     }
@@ -124,15 +127,25 @@ public class DetailsFragment extends Fragment {
         //extraer lo valores
         String id= eteId.getText().toString().trim();
         String nombre= eteNombre.getText().toString().trim();
+
+
         FundoEntity nFundoEntity=new FundoEntity();
         nFundoEntity.setIdproductor(Integer.parseInt(id));
         nFundoEntity.setNombreproductor(nombre);
 
+        nFundoEntity.setEstado( mListener.getCrudOperations().getFundo(Integer.parseInt(id)).getEstado());
+        nFundoEntity.setSincro(mListener.getCrudOperations().getFundo(Integer.parseInt(id)).getSincro());
+
+
 
         //llamar el método de crudoperation
-        //mListener.getCrudOperations().updateNote(nNoteEntity);
+        mListener.getCrudOperations().updateFundo(nFundoEntity);
 
         //cerrar la pantalla
+        Handler handler = ListaFundoFragment.sUpdateHandler;
+        if (handler != null) {
+            handler.obtainMessage().sendToTarget();
+        }
         getActivity().finish();
     }
 }

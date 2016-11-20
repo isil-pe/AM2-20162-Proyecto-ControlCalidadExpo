@@ -1,5 +1,7 @@
 package como.isil.mynotes.rest;
 
+import android.app.ProgressDialog;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -7,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.isil.mynotes.rest.R;
 
@@ -14,13 +17,15 @@ import com.isil.mynotes.rest.R;
 import como.isil.mynotes.rest.entity.FundoEntity;
 import como.isil.mynotes.rest.storage.db.CRUDOperations;
 import como.isil.mynotes.rest.storage.db.MyDatabase;
+import como.isil.mynotes.rest.utils.OnSyncCload;
+import como.isil.mynotes.rest.utils.SyncCloud;
 import como.isil.mynotes.rest.view.dialogs.MyDialogFragment;
 import como.isil.mynotes.rest.view.dialogs.MyDialogListener;
 import como.isil.mynotes.rest.view.fragments.AddFundoFragment;
 import como.isil.mynotes.rest.view.fragments.DetailsFragment;
 import como.isil.mynotes.rest.view.listeners.OnFundoListener;
 
-public class FundoActivity extends ActionBarActivity  implements OnFundoListener, MyDialogListener{
+public class FundoActivity extends ActionBarActivity  implements OnFundoListener, MyDialogListener, OnSyncCload {
 
     public static final  int ADD_FUNDO=100;
     public static final  int DETAIL_FUNDO=101;
@@ -37,6 +42,9 @@ public class FundoActivity extends ActionBarActivity  implements OnFundoListener
 
     private View rlayLoading;
 
+    ProgressDialog progressDialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +56,8 @@ public class FundoActivity extends ActionBarActivity  implements OnFundoListener
         Bundle bundle= new Bundle();
         bundle.putSerializable("FUNDO",fundoEntity);
         changeFragment(fragmentSelected, bundle);
+
+
     }
 
     private void validateExtras() {
@@ -134,11 +144,14 @@ public class FundoActivity extends ActionBarActivity  implements OnFundoListener
     @Override
     public void onPositiveListener(Object object, int type) {
         Log.v(TAG, "dialog positive");
-        //NoteEntity auxNoteEntity= (NoteEntity)object;
-        if(tmpFundoEntity!=null)
+        FundoEntity auxNoteEntity= (FundoEntity)object;
+        if(auxNoteEntity!=null)
         {
             //eliminar
-           // crudOperations.deleteFundo(tmpFundoEntity);
+            auxNoteEntity.setEstado("ELIMINADO");
+           auxNoteEntity.setSincro(crudOperations.getFundo(auxNoteEntity.getIdproductor()).getSincro());
+
+           crudOperations.updateFundo(auxNoteEntity);
             tmpFundoEntity=null;
             //cerrar vista
             finish();
@@ -149,5 +162,28 @@ public class FundoActivity extends ActionBarActivity  implements OnFundoListener
     @Override
     public void onNegativeListener(Object object, int type) {
         Log.v(TAG, "dialog negative");
+    }
+
+
+
+    @Override
+    public void onPreExecute() {
+        progressDialog = ProgressDialog.show(FundoActivity.this,
+                "ProgressDialog",
+                "Wait for check conection");
+    }
+
+    @Override
+    public void onProgressUpdate(String... text) {
+
+    }
+
+    @Override
+    public void onPostExecute(String result) {
+
+        progressDialog.dismiss();
+
+        Toast.makeText(this.getBaseContext(),""+result,
+                Toast.LENGTH_SHORT).show();
     }
 }

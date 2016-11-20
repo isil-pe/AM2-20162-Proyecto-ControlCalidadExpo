@@ -9,11 +9,7 @@
         android:padding="5dp"
         android:orientation="vertical">
 
-        <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nombre del Fundo"
-            android:id="@+id/eteId" />
+
 
         <EditText
             android:layout_width="fill_parent"
@@ -21,12 +17,7 @@
             android:hint="Descripción de la Nota"
             android:lines="2"
             android:id="@+id/eteNombre" />
-        <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:inputType="textMultiLine"
-            android:ems="10"
-            android:id="@+id/eteFundo" />
+
     </LinearLayout>
     <Button
         android:layout_width="fill_parent"
