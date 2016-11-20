@@ -16,5 +16,5 @@ public interface AddFundoView {
 
 
 
-    public void onPostExecute(String result);
+
 }

@@ -7,7 +7,7 @@
             android:id="@+id/menuAndroid"
             android:checked="false"
             android:icon="@drawable/ic_android_black_48dp"
-            android:title="Android" />
+            android:title="Fundos" />
 
         <item
             android:id="@+id/menuAndroidBug"

@@ -55,7 +55,7 @@ public class ListaFundoFragment extends Fragment {
     private static final int ACTION_ADD = 1;
     private static final int ACTION_DETAIL = 2;
     public static Handler sUpdateHandler;
-
+    Button  btnAddFundo2;
     public ListaFundoFragment() {
         // Required empty public constructor
     }
@@ -131,7 +131,7 @@ public class ListaFundoFragment extends Fragment {
         //tviLogout = (TextView) findViewById(R.id.tviLogout);
         //tviUser = (TextView) findViewById(R.id.tviUser);
         lstFundos = (ListView)getView().findViewById(R.id.lstFundos);
-        //btnAddFundo = (Button) (findViewById(R.id.btnAddFundo));
+        btnAddFundo2 = (Button) getView().findViewById(R.id.btnAddfundo2);
         //rlayLoading = (findViewById(R.id.rlayLoading));
 
         //user Info
@@ -141,12 +141,12 @@ public class ListaFundoFragment extends Fragment {
         }
 
         //events
-        /*btnAddFundo.setOnClickListener(new View.OnClickListener() {
+        btnAddFundo2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gotoFundo(ACTION_ADD, null);
             }
-        });*/
+        });
 
         lstFundos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

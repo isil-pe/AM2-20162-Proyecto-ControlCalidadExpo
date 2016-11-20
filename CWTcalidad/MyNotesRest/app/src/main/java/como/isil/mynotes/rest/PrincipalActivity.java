@@ -43,14 +43,14 @@ public class PrincipalActivity extends AppCompatActivity implements OnNavListene
 
 
                 //Checking if the item is in checked state or not, if not make it in checked state
-                if(menuItem.isChecked()) menuItem.setChecked(false);
+                if (menuItem.isChecked()) menuItem.setChecked(false);
                 else menuItem.setChecked(true);
 
                 //Closing drawer on item click
                 drawerLayout.closeDrawers();
 
                 //Check to see which item was being clicked and perform appropriate action
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
 
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
@@ -79,7 +79,7 @@ public class PrincipalActivity extends AppCompatActivity implements OnNavListene
 
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.openDrawer, R.string.closeDrawer){
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -104,10 +104,10 @@ public class PrincipalActivity extends AppCompatActivity implements OnNavListene
 
 
     private void changeFragment(int i) {
-        Fragment fragment=null;
-        switch (i){
+        Fragment fragment = null;
+        switch (i) {
             case 0:
-                fragment= new ListaFundoFragment();
+                fragment = new ListaFundoFragment();
                 break;
             case 1:
                 //fragment= new BugFragment();
@@ -116,9 +116,9 @@ public class PrincipalActivity extends AppCompatActivity implements OnNavListene
                 //fragment= new HelpFragment();
                 break;
         }
-        if(fragment!=null){
+        if (fragment != null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frame,fragment);
+            fragmentTransaction.replace(R.id.frame, fragment);
             fragmentTransaction.commit();
         }
     }

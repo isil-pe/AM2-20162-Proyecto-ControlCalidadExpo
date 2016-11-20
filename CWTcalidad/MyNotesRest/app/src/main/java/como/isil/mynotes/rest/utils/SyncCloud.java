@@ -59,7 +59,7 @@ public  class SyncCloud extends AsyncTask<String, String, String>{
 
 
             Boolean con = isURLReachable(context);
-            resp = "internet coneccion "+ con ;
+            resp = String.valueOf(con) ;
         }  catch (Exception e) {
             e.printStackTrace();
             resp = e.getMessage();
@@ -114,7 +114,7 @@ public  class SyncCloud extends AsyncTask<String, String, String>{
                 urlc.setReadTimeout(10 * 1000);
                 urlc.connect();
                 if (urlc.getResponseCode() == 200) {        // 200 = "OK" code (http connection is fine).
-                    Log.v("Connection", "Success !");
+                    Log.v("sync", "Success url !");
                     return true;
                 } else {
                     return false;
@@ -125,7 +125,7 @@ public  class SyncCloud extends AsyncTask<String, String, String>{
             } catch (IOException e) {
                 return false;
             } catch (NetworkOnMainThreadException e) {
-                Log.v("error internet", e.toString());
+                Log.v("sync", e.toString());
                 return false;
             }
         }

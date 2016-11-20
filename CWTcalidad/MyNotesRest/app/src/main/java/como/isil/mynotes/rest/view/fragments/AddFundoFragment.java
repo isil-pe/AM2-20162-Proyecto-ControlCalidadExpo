@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,6 +23,7 @@ import como.isil.mynotes.rest.presenter.fundo.AddFundoView;
 import como.isil.mynotes.rest.presenter.fundo.FundoPresenter;
 import como.isil.mynotes.rest.utils.OnSyncCload;
 import como.isil.mynotes.rest.utils.SyncCloud;
+import como.isil.mynotes.rest.view.fragments.fundo.ListaFundoFragment;
 import como.isil.mynotes.rest.view.listeners.OnFundoListener;
 
 public class AddFundoFragment extends Fragment  implements AddFundoView {
@@ -35,7 +37,7 @@ public class AddFundoFragment extends Fragment  implements AddFundoView {
     private EditText eteFundo;
     private Button btnAddFundo;
 
-    private String id;
+    private String id=null;
     private String nombre;
     private String estado;
     private String sincro;
@@ -50,7 +52,16 @@ public class AddFundoFragment extends Fragment  implements AddFundoView {
 
     OnSyncCload synclistener;
     ProgressDialog progressDialog;
-    Boolean internet = false;
+    private Boolean internet = false;
+
+    public Boolean getInternet() {
+        return internet;
+    }
+
+    public void setInternet(Boolean internet) {
+        this.internet = internet;
+    }
+
     Boolean graboFundo = false;
 
     // TODO: Rename and change types and number of parameters
@@ -122,6 +133,8 @@ public class AddFundoFragment extends Fragment  implements AddFundoView {
         fundoPresenter = new FundoPresenter();
         fundoPresenter.attachedView(this);
 
+
+
         btnAddFundo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,36 +148,41 @@ public class AddFundoFragment extends Fragment  implements AddFundoView {
         nombre= eteNombre.getText().toString().trim();
         estado = "NO";
         sincro = "NO";
-        //desc= eteDesc.getText().toString().trim();
-        //note= eteNote.getText().toString().trim();
 
         FundoEntity fundoEntity= new FundoEntity();
         fundoEntity.setNombreproductor(nombre);
         fundoEntity.setEstado(estado);
-        Log.v("pruabddfundo",""+internet);
-if(internet){
-    Log.v("pruabddfundo","si internet");
-    addNoteCloud();
+        fundoEntity.setSincro(sincro);
+        id = String.valueOf( mListener.getCrudOperations().addFundo(fundoEntity));
 
-    if(graboFundo) {
-        fundoEntity.setSincro("SI");
-    }
-}else{
-    fundoEntity.setSincro("NO");
+        if(internet){
+            Log.v("sync","si internet add note");
+            addNoteCloud();
 
-}
+            if(graboFundo) {
+                sincro = "SI";
+                fundoEntity.setSincro(sincro);
+                mListener.getCrudOperations().updateFundo(fundoEntity);
+            }
+        }else{
 
+            Log.v("sync",""+internet+" add note");
+        }
 
-        mListener.getCrudOperations().addFundo(fundoEntity);
+        Handler handler = ListaFundoFragment.sUpdateHandler;
+        if (handler != null) {
+            handler.obtainMessage().sendToTarget();
+        }
         getActivity().finish();
     }
 
     private void addNoteCloud(){
 
-
-        nombre= eteNombre.getText().toString().trim();
-        sincro = "SI";
-        fundoPresenter.addFundo(Integer.parseInt(id), nombre,estado,sincro);
+        if(Long.parseLong(id)>=0) {
+            nombre = eteNombre.getText().toString().trim();
+            sincro = "SI";
+            fundoPresenter.addFundo(Integer.parseInt(id), nombre, estado, sincro);
+        }
     }
 
     @Override
@@ -190,10 +208,7 @@ if(internet){
 
 
 
-    @Override
-    public void onPostExecute(String result) {
-        internet = Boolean.parseBoolean(result);
-    }
+
 
     @Override
     public Context getContext() {

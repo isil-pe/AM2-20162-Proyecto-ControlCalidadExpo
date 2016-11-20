@@ -111,6 +111,7 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mListener.deleteFundo(fundoEntity);
+
             }
         });
 

@@ -7,11 +7,30 @@
     <!-- TODO: Update blank fragment layout -->
     <ListView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="462dp"
         android:scrollbarSize="0dp"
         android:scrollbars="none"
         android:id="@+id/lstFundos">
 
     </ListView>
+
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:weightSum="1">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:text="New Button"
+            android:id="@+id/btnAddfundo2"
+            android:layout_gravity="left|bottom"
+            android:layout_weight="1.06" />
+    </LinearLayout>
+
 
 </FrameLayout>

@@ -133,7 +133,7 @@ public class CRUDOperations {
 
 	public int deleteFundo(FundoEntity fundoEntity) {
 		SQLiteDatabase db = helper.getWritableDatabase();
-		Log.v("DELETE", ""+fundoEntity.getIdproductor());
+
 		int row = db.delete(MyDatabase.TABLE_FUNDOS,
 				MyDatabase.KEY_IDPRODUCTOR + "=?",
 				new String[]{String.valueOf(fundoEntity.getIdproductor())});

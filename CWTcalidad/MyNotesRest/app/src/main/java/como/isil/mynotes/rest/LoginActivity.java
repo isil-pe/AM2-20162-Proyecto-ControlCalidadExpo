@@ -93,7 +93,7 @@ public class LoginActivity extends ActionBarActivity implements LogInView {
     @Override
     public void gotoMain() {
         savePreferences();
-       Intent intent= new Intent(this,MainActivity.class);
+       Intent intent= new Intent(this,PrincipalActivity.class);
         startActivity(intent);
     }
 

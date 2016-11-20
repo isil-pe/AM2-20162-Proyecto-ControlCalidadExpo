@@ -13,6 +13,7 @@ public class MyDatabase extends SQLiteOpenHelper {
     public static final String TABLE_FUNDOS = "tb_fundo";
 	public static final String TABLE_PROGRAMAS = "tb_programa";
 	public static final String TABLE_VISITAS = "tb_visita";
+	public static final String TABLE_USER = "tb_user";
 
     //Columnas de la Tabla Fundo
     public static final String KEY_IDPRODUCTOR = "idproductor";
@@ -33,7 +34,16 @@ public class MyDatabase extends SQLiteOpenHelper {
 	public static final String KEY_FECHAVISITA = "fecvisita";
 	public static final String KEY_CONTENEDOR = "contenedor";
 	public static final String KEY_COMENTARIO = "comentario";
-    
+
+	//Columnas de la Tabla User
+
+	public static final String KEY_USERID = "userid";
+	public static final String KEY_USER = "user";
+	public static final String KEY_PASSWORD = "password";
+	public static final String KEY_USERNOMBRE = "nombre";
+
+
+
     public MyDatabase(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		// TODO Auto-generated constructor stub
@@ -42,6 +52,19 @@ public class MyDatabase extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
+
+		String sqluser= "CREATE TABLE " + TABLE_USER + "("
+				+ KEY_USERID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ,"
+				+ KEY_USER + " TEXT,"
+				+ KEY_PASSWORD + " TEXT,"
+				+ KEY_USERNOMBRE + " TEXT"
+
+
+				+ ")";
+		db.execSQL(sqluser);
+
+
+
 		String sqlfundos= "CREATE TABLE " + TABLE_FUNDOS + "("
 				+ KEY_IDPRODUCTOR + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ,"
 				+ KEY_NOMBREPRODUCTOR + " TEXT,"
@@ -80,6 +103,9 @@ public class MyDatabase extends SQLiteOpenHelper {
 
 		String sqlvisita= "DROP TABLE IF EXISTS " + TABLE_VISITAS;
 		db.execSQL(sqlvisita);
+
+		String sqluser= "DROP TABLE IF EXISTS " + TABLE_USER;
+		db.execSQL(sqluser);
 	}
 
 }

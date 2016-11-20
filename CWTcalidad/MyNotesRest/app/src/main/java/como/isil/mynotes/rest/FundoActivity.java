@@ -1,8 +1,10 @@
 package como.isil.mynotes.rest;
 
 import android.app.ProgressDialog;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +25,7 @@ import como.isil.mynotes.rest.view.dialogs.MyDialogFragment;
 import como.isil.mynotes.rest.view.dialogs.MyDialogListener;
 import como.isil.mynotes.rest.view.fragments.AddFundoFragment;
 import como.isil.mynotes.rest.view.fragments.DetailsFragment;
+import como.isil.mynotes.rest.view.fragments.fundo.ListaFundoFragment;
 import como.isil.mynotes.rest.view.listeners.OnFundoListener;
 
 public class FundoActivity extends ActionBarActivity  implements OnFundoListener, MyDialogListener, OnSyncCload {
@@ -43,6 +46,8 @@ public class FundoActivity extends ActionBarActivity  implements OnFundoListener
     private View rlayLoading;
 
     ProgressDialog progressDialog;
+    Boolean internet = false;
+
 
 
     @Override
@@ -55,10 +60,13 @@ public class FundoActivity extends ActionBarActivity  implements OnFundoListener
         crudOperations= new CRUDOperations(new MyDatabase(this));
         Bundle bundle= new Bundle();
         bundle.putSerializable("FUNDO",fundoEntity);
+
         changeFragment(fragmentSelected, bundle);
 
 
     }
+
+
 
     private void validateExtras() {
         if(getIntent().getExtras()!=null)
@@ -91,7 +99,7 @@ public class FundoActivity extends ActionBarActivity  implements OnFundoListener
         {
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, fragment)
+                    .replace(R.id.container, fragment,"TAG_ADDFUNDOFRAG")
                     .commit();
         }
     }
@@ -152,6 +160,10 @@ public class FundoActivity extends ActionBarActivity  implements OnFundoListener
            auxNoteEntity.setSincro(crudOperations.getFundo(auxNoteEntity.getIdproductor()).getSincro());
 
            crudOperations.updateFundo(auxNoteEntity);
+            Handler handler = ListaFundoFragment.sUpdateHandler;
+            if (handler != null) {
+                handler.obtainMessage().sendToTarget();
+            }
             tmpFundoEntity=null;
             //cerrar vista
             finish();
@@ -182,8 +194,10 @@ public class FundoActivity extends ActionBarActivity  implements OnFundoListener
     public void onPostExecute(String result) {
 
         progressDialog.dismiss();
+        internet = Boolean.parseBoolean(result);
 
-        Toast.makeText(this.getBaseContext(),""+result,
-                Toast.LENGTH_SHORT).show();
+        AddFundoFragment addFundoFragment = (AddFundoFragment)getSupportFragmentManager().findFragmentByTag("TAG_ADDFUNDOFRAG");
+       addFundoFragment.setInternet(internet);
+        Log.v("sync","true add fundo activity on post execute");
     }
 }
