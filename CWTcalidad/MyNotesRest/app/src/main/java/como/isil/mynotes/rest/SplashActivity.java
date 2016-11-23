@@ -31,7 +31,7 @@ public class SplashActivity extends ActionBarActivity {
                 boolean session= PreferencesHelper.isSignedIn(SplashActivity.this);
                 if(session)
                 {
-                    intent=new Intent(SplashActivity.this, MainActivity.class);
+                    intent=new Intent(SplashActivity.this, PrincipalActivity.class);
                 }else {
                     intent = new Intent(SplashActivity.this, LoginActivity.class);
                 }

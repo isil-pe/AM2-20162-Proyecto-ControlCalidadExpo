@@ -96,6 +96,8 @@ public class CRUDOperations {
                 FundoEntity fundoEntity = new FundoEntity();
                 fundoEntity.setIdproductor(Integer.parseInt(cursor.getString(0)));
                 fundoEntity.setNombreproductor(cursor.getString(1));
+				fundoEntity.setEstado(cursor.getString(2));
+				fundoEntity.setSincro(cursor.getString(3));
 
 
                 lst.add(fundoEntity);

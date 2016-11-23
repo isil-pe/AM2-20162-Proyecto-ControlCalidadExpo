@@ -53,12 +53,20 @@ public class FundoAdapter extends BaseAdapter {
             v = inflater.inflate(R.layout.row_fundo, null);
             ViewHolder holder = new ViewHolder();
             holder.tviName = (TextView)v.findViewById(R.id.tviName);
+            holder.iviIconoEstado = (ImageView)v.findViewById(R.id.iviIconoEstado);
             v.setTag(holder);
         }
         FundoEntity entry = lsFundoEntities.get(position);
         if(entry != null) {
             ViewHolder holder = (ViewHolder)v.getTag();
             holder.tviName.setText(entry.getNombreproductor());
+
+
+            if ( entry.getSincro().equals("NO")   ){
+
+                holder.iviIconoEstado.setImageResource(R.drawable.notsync);
+
+            }
         }
 
         return v;
@@ -68,5 +76,6 @@ public class FundoAdapter extends BaseAdapter {
     {
         ImageView iviNote;
         TextView tviName;
+        ImageView iviIconoEstado;
     }
 }

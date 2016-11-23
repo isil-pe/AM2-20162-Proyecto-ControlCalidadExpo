@@ -16,10 +16,10 @@
             android:title="Android Bug" />
 
         <item
-            android:id="@+id/menuAndroidHelp"
+            android:id="@+id/menuCerrarSesion"
             android:checked="false"
             android:icon="@drawable/ic_help_black_48dp"
-            android:title="Android Help" />
+            android:title="Cerrar Sesion" />
 
 
     </group>

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,37 @@ public class CRUDOperationsUser {
     }
 
 
+    public UserEntity getUserEmail(String u, String p) {
+        SQLiteDatabase db = helper.getReadableDatabase(); //modo lectura
+
+        UserEntity userEntity = new UserEntity();
+        String sql = "SELECT * FROM " + MyDatabase.TABLE_USER+" WHERE "+MyDatabase.KEY_USER+"='"+u+"' AND "+MyDatabase.KEY_PASSWORD
+                +"= '"+p+"'";
+
+        Cursor cursor = db.rawQuery(sql, null);
+
+
+
+
+
+        if (cursor != null && cursor.getCount()>0) {
+            cursor.moveToFirst();
+
+
+            int uid = Integer.parseInt(cursor.getString(0));
+            String usuario = cursor.getString(1);
+            String password = cursor.getString(2);
+            String nombre = cursor.getString(3);
+
+
+            userEntity = new UserEntity(
+                    uid, usuario, nombre, password);
+        }
+
+
+
+        return userEntity;
+    }
 
 
 
@@ -86,6 +118,13 @@ public class CRUDOperationsUser {
 
 
     //--------------------------------------------
+
+    public void dropTableUser(){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String sql =  "DELETE FROM " + MyDatabase.TABLE_USER;
+        db.execSQL(sql);
+
+    }
 
     public int deleteUser(UserEntity userEntity) {
         SQLiteDatabase db = helper.getWritableDatabase();

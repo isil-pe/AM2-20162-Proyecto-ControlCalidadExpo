@@ -125,7 +125,7 @@ public  class SyncCloud extends AsyncTask<String, String, String>{
             } catch (IOException e) {
                 return false;
             } catch (NetworkOnMainThreadException e) {
-                Log.v("sync", e.toString());
+                Log.v("sync", ""+e.toString());
                 return false;
             }
         }

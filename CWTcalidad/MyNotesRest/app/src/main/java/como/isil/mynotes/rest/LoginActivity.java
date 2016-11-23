@@ -17,14 +17,18 @@ import com.isil.mynotes.rest.R;
 
 import java.util.concurrent.ExecutionException;
 
+import como.isil.mynotes.rest.entity.UserEntity;
 import como.isil.mynotes.rest.presenter.LogInPresenter;
 import como.isil.mynotes.rest.presenter.LogInView;
 import como.isil.mynotes.rest.storage.PreferencesHelper;
 
+import como.isil.mynotes.rest.storage.db.CRUDOperationsUser;
+import como.isil.mynotes.rest.storage.db.MyDatabase;
+import como.isil.mynotes.rest.utils.OnSyncCload;
 import como.isil.mynotes.rest.utils.SyncCloud;
 
 
-public class LoginActivity extends ActionBarActivity implements LogInView {
+public class LoginActivity extends ActionBarActivity implements LogInView , OnSyncCload {
 
     private Button btnLogin;
     private EditText eteUsername;
@@ -32,10 +36,11 @@ public class LoginActivity extends ActionBarActivity implements LogInView {
     private String username;
     private String password;
     private View rlayLoading,container;
+    OnSyncCload synclistener;
 
-
+    Boolean internet = false;
     private LogInPresenter logInPresenter;
-
+    CRUDOperationsUser cruduser;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -49,6 +54,11 @@ public class LoginActivity extends ActionBarActivity implements LogInView {
         logInPresenter= new LogInPresenter();
         logInPresenter.attachedView(this);
         init();
+
+
+
+
+
     }
 
     private void init() {
@@ -57,9 +67,14 @@ public class LoginActivity extends ActionBarActivity implements LogInView {
         btnLogin=(Button)findViewById(R.id.btnLogin);
         rlayLoading=findViewById(R.id.rlayLoading);
         container=findViewById(R.id.container);
+         cruduser= new CRUDOperationsUser(new MyDatabase(this));
 
-
-
+        try {
+            synclistener = (OnSyncCload) this;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(this.toString()
+                    + " must implement OnSyncCloadOnSyncCload");
+        }
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +82,12 @@ public class LoginActivity extends ActionBarActivity implements LogInView {
             public void onClick(View view) {
                 if (validateForm()) {
                     //gotoMain();
-                    logInPresenter.logIn(username,password);
+
+
+
+                    new SyncCloud(synclistener, getContext()).execute();
+
+
                 }
             }
         });
@@ -82,7 +102,7 @@ public class LoginActivity extends ActionBarActivity implements LogInView {
 
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                     if (validateForm()) {
-                        logInPresenter.logIn(username,password);
+                       // logInPresenter.logIn(username,password);
                     }
                 }
                 return false;
@@ -99,6 +119,13 @@ public class LoginActivity extends ActionBarActivity implements LogInView {
 
     private void savePreferences() {
         PreferencesHelper.saveSession(this,username,password);
+
+
+        cruduser.dropTableUser();
+        UserEntity user = new UserEntity();
+        user.setEmail(username);
+        user.setToken(password);
+        cruduser.addUser(user);
     }
 
     private boolean validateForm() {
@@ -115,9 +142,18 @@ public class LoginActivity extends ActionBarActivity implements LogInView {
             etePassword.setError("Error campo password");
             return false;
         }
+
+
+
         return true;
     }
 
+    public Boolean loginLocal(String username, String password){
+
+
+
+        return false;
+    }
 
     @Override
     public void showLoading() {
@@ -143,4 +179,44 @@ public class LoginActivity extends ActionBarActivity implements LogInView {
     }
 
 
+    @Override
+    public void onPreExecute() {
+        showLoading();
+    }
+
+    @Override
+    public void onProgressUpdate(String... text) {
+
+    }
+
+    @Override
+    public void onPostExecute(String result) {
+        internet = Boolean.parseBoolean(result);
+
+login();
+
+
+
+    }
+
+    public void login(){
+        if(internet){
+hideLoading();
+            logInPresenter.logIn(username,password);
+
+        }else{
+            showLoading();
+            if(cruduser.getUserEmail(username,password).getEmail()!=null){
+                hideLoading();
+                gotoMain();
+            }else{
+                hideLoading();
+                Snackbar snackbar = Snackbar
+                        .make(container,"Login fallo BD Local", Snackbar.LENGTH_LONG);
+
+                snackbar.show();
+
+            }
+
+    }}
 }

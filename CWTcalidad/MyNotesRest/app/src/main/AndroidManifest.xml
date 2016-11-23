@@ -38,14 +38,14 @@
             android:name="como.isil.mynotes.rest.FundoActivity"
             android:label="@string/title_activity_note"
             android:screenOrientation="portrait" />
-        <activity android:name="como.isil.mynotes.rest.PruebaActivity"></activity>
+        <activity android:name="como.isil.mynotes.rest.PruebaActivity">
+
+
+        </activity>
         <activity android:name="como.isil.mynotes.rest.PrincipalActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NavAppTheme"
             >
-
-
-
         </activity>
     </application>
 

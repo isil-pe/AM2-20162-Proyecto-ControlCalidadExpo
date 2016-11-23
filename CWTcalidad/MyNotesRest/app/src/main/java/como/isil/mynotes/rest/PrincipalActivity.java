@@ -1,5 +1,6 @@
 package como.isil.mynotes.rest;
 
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -14,6 +15,7 @@ import android.view.View;
 import com.facebook.stetho.Stetho;
 import com.isil.mynotes.rest.R;
 
+import como.isil.mynotes.rest.storage.PreferencesHelper;
 import como.isil.mynotes.rest.view.fragments.fundo.ListaFundoFragment;
 import como.isil.mynotes.rest.view.listeners.OnNavListener;
 
@@ -64,9 +66,9 @@ public class PrincipalActivity extends AppCompatActivity implements OnNavListene
                         //Toast.makeText(getApplicationContext(),"Stared Selected",Toast.LENGTH_SHORT).show();
                         changeFragment(1);
                         return true;
-                    case R.id.menuAndroidHelp:
+                    case R.id.menuCerrarSesion:
                         //Toast.makeText(getApplicationContext(),"Send Selected",Toast.LENGTH_SHORT).show();
-                        changeFragment(2);
+                        logout();
                         return true;
 
                     default:
@@ -121,5 +123,11 @@ public class PrincipalActivity extends AppCompatActivity implements OnNavListene
             fragmentTransaction.replace(R.id.frame, fragment);
             fragmentTransaction.commit();
         }
+    }
+
+    private void logout() {
+        PreferencesHelper.signOut(this);
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 }
