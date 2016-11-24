@@ -21,6 +21,8 @@ import como.isil.mynotes.rest.MainActivity;
 import como.isil.mynotes.rest.entity.FundoEntity;
 import como.isil.mynotes.rest.presenter.fundo.AddFundoView;
 import como.isil.mynotes.rest.presenter.fundo.FundoPresenter;
+import como.isil.mynotes.rest.storage.db.CRUDOperations;
+import como.isil.mynotes.rest.storage.db.MyDatabase;
 import como.isil.mynotes.rest.utils.OnSyncCload;
 import como.isil.mynotes.rest.utils.SyncCloud;
 import como.isil.mynotes.rest.view.fragments.fundo.ListaFundoFragment;
@@ -48,11 +50,12 @@ public class AddFundoFragment extends Fragment  implements AddFundoView {
 
     private OnFundoListener mListener;
     private FundoPresenter fundoPresenter;
-
+CRUDOperations crudfundo;
 
     OnSyncCload synclistener;
     ProgressDialog progressDialog;
     private Boolean internet = false;
+private String idgrabado = "";
 
     public Boolean getInternet() {
         return internet;
@@ -87,7 +90,7 @@ public class AddFundoFragment extends Fragment  implements AddFundoView {
         }
 
         SyncCloud sc = new SyncCloud(synclistener, super.getActivity());
-
+            crudfundo = new CRUDOperations(new MyDatabase(this.getContext()));
         sc.execute();
     }
 
@@ -159,14 +162,7 @@ public class AddFundoFragment extends Fragment  implements AddFundoView {
             Log.v("sync","si internet add note");
             addNoteCloud();
 
-            if(graboFundo) {
-                sincro = "SI";
-                fundoEntity.setSincro(sincro);
-                mListener.getCrudOperations().updateFundo(fundoEntity);
-            }
-        }else{
 
-            Log.v("sync",""+internet+" add note");
         }
 
         Handler handler = ListaFundoFragment.sUpdateHandler;
@@ -181,6 +177,7 @@ public class AddFundoFragment extends Fragment  implements AddFundoView {
         if(Long.parseLong(id)>=0) {
             nombre = eteNombre.getText().toString().trim();
             sincro = "SI";
+            idgrabado = id;
             fundoPresenter.addFundo(Integer.parseInt(id), nombre, estado, sincro);
         }
     }
@@ -203,6 +200,13 @@ public class AddFundoFragment extends Fragment  implements AddFundoView {
     @Override
     public void onAddFundoSuccess() {
         graboFundo = true;
+        FundoEntity fundo = crudfundo.getFundo(Integer.parseInt(idgrabado));
+        fundo.setSincro("SI");
+        crudfundo.updateFundo(fundo);
+        Handler handler = ListaFundoFragment.sUpdateHandler;
+        if (handler != null) {
+            handler.obtainMessage().sendToTarget();
+        }
         getActivity().finish();
     }
 

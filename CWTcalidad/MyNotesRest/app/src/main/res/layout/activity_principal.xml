@@ -21,7 +21,7 @@ tools:context="como.isil.mynotes.rest.PrincipalActivity">
         android:layout_height="match_parent">
 
     </FrameLayout>
-
+    <include layout="@layout/layout_loading"/>
 </LinearLayout>
 
 <android.support.design.widget.NavigationView

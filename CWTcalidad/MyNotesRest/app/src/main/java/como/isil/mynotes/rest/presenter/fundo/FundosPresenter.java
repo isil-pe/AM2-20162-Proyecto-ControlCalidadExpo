@@ -63,6 +63,7 @@ public class FundosPresenter {
 
         if(fundosResponse !=null){
             List<FundoEntity> fundos= fundosResponse.getData();
+
             fundosView.renderFundos(fundos);
         }
 

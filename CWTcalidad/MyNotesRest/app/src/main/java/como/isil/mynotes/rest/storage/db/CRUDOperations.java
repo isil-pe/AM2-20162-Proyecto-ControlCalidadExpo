@@ -86,6 +86,27 @@ public class CRUDOperations {
         return lst;
     }
 
+	public int getFundoNombre(String nombre) {
+		SQLiteDatabase db = helper.getReadableDatabase(); //modo lectura
+
+
+		String sql = "SELECT * FROM " + MyDatabase.TABLE_FUNDOS+" WHERE "+MyDatabase.KEY_NOMBREPRODUCTOR+"='"+nombre+"'";
+
+		Cursor cursor = db.rawQuery(sql, null);
+
+
+
+
+
+		if (cursor != null && cursor.getCount()>0) {
+
+		}
+
+
+
+		return cursor.getCount();
+	}
+
     public List<FundoEntity> getAllFundosNoEliminados() {
         List<FundoEntity> lst = new ArrayList<FundoEntity>();
         String sql = "SELECT  * FROM " + MyDatabase.TABLE_FUNDOS +" WHERE "+MyDatabase.KEY_ESTADOPRODUCTOR+" != 'ELIMINADO' ";

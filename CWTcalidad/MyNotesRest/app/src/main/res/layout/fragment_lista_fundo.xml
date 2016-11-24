@@ -26,10 +26,14 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="70dp"
-            android:text="New Button"
+            android:text="Nuevo Fundo"
             android:id="@+id/btnAddfundo2"
             android:layout_gravity="left|bottom"
-            android:layout_weight="1.06" />
+            android:layout_weight="1.06"
+            android:padding="5dp"
+            android:background="#D5EDED"
+            />
+
     </LinearLayout>
 
 

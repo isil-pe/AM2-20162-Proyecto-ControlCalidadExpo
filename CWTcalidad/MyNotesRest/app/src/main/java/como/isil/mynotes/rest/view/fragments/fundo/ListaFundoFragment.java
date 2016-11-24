@@ -1,5 +1,6 @@
 package como.isil.mynotes.rest.view.fragments.fundo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import como.isil.mynotes.rest.FundoActivity;
 import como.isil.mynotes.rest.entity.FundoEntity;
+import como.isil.mynotes.rest.presenter.fundo.FundosView;
 import como.isil.mynotes.rest.storage.PreferencesHelper;
 import como.isil.mynotes.rest.storage.db.CRUDOperations;
 import como.isil.mynotes.rest.storage.db.MyDatabase;
@@ -46,7 +48,7 @@ public class ListaFundoFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+
 
     private ListView lstFundos;
     private List<FundoEntity> fundos;
@@ -56,6 +58,8 @@ public class ListaFundoFragment extends Fragment {
     private static final int ACTION_DETAIL = 2;
     public static Handler sUpdateHandler;
     Button  btnAddFundo2;
+
+    FundosView mlistener;
     public ListaFundoFragment() {
         // Required empty public constructor
     }
@@ -114,7 +118,7 @@ public class ListaFundoFragment extends Fragment {
         init();
         //1. DATA
 
-        loadData();
+
         //2 Lista lstContacts
         //3 Item row_contact
         //4 Adapter
@@ -188,17 +192,18 @@ public class ListaFundoFragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
-
+        try {
+            mlistener = (FundosView) context ;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
        /* if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -210,7 +215,7 @@ public class ListaFundoFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mlistener = null;
     }
 
     /**

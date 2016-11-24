@@ -1,7 +1,10 @@
 package como.isil.mynotes.rest;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -9,21 +12,34 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.facebook.stetho.Stetho;
 import com.isil.mynotes.rest.R;
 
+import java.util.List;
+
+import como.isil.mynotes.rest.entity.FundoEntity;
+import como.isil.mynotes.rest.entity.UserEntity;
+import como.isil.mynotes.rest.presenter.fundo.FundosPresenter;
+import como.isil.mynotes.rest.presenter.fundo.FundosView;
 import como.isil.mynotes.rest.storage.PreferencesHelper;
+import como.isil.mynotes.rest.storage.db.CRUDOperations;
+import como.isil.mynotes.rest.storage.db.MyDatabase;
+import como.isil.mynotes.rest.view.adapters.FundoAdapter;
 import como.isil.mynotes.rest.view.fragments.fundo.ListaFundoFragment;
 import como.isil.mynotes.rest.view.listeners.OnNavListener;
 
-public class PrincipalActivity extends AppCompatActivity implements OnNavListener {
+public class PrincipalActivity extends AppCompatActivity implements OnNavListener, FundosView {
 
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private View rlayLoading,container;
+    private List<FundoEntity> lsFundoEntitiesCloud;
+    private FundosPresenter fundosPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +51,18 @@ public class PrincipalActivity extends AppCompatActivity implements OnNavListene
         Stetho.initializeWithDefaults(this);
         //Initializing NavigationView
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        rlayLoading = (findViewById(R.id.rlayLoading));
 
+        fundosPresenter = new FundosPresenter();
+        fundosPresenter.attachedView(this);
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             // This method will trigger on item Click of navigation menu
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+
 
 
                 //Checking if the item is in checked state or not, if not make it in checked state
@@ -109,6 +130,7 @@ public class PrincipalActivity extends AppCompatActivity implements OnNavListene
         Fragment fragment = null;
         switch (i) {
             case 0:
+                loadCloudFundos();
                 fragment = new ListaFundoFragment();
                 break;
             case 1:
@@ -125,9 +147,68 @@ public class PrincipalActivity extends AppCompatActivity implements OnNavListene
         }
     }
 
+
+
     private void logout() {
         PreferencesHelper.signOut(this);
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
+
+
+
+    @Override
+    public void showLoading() {
+        this.rlayLoading.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        this.rlayLoading.setVisibility(View.GONE);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void onMessageError(String message) {
+        Snackbar snackbar = Snackbar
+                .make(container, message, Snackbar.LENGTH_LONG);
+
+        snackbar.show();
+    }
+
+    @Override
+    public void renderFundos(List<FundoEntity> fundos) {
+
+        Log.v("sync","render");
+        lsFundoEntitiesCloud = fundos;
+        CRUDOperations crudOperations = new CRUDOperations(new MyDatabase(this.getContext()));
+        List<FundoEntity> fundos2= crudOperations.getAllFundosNoEliminados();
+
+        for(FundoEntity fundo1 : lsFundoEntitiesCloud) {
+
+
+           int cant  = crudOperations.getFundoNombre(fundo1.getNombreproductor());
+            if(cant==0){
+                fundo1.setEstado("NO");
+                fundo1.setSincro("SI");
+                crudOperations.addFundo(fundo1);
+            }
+
+        }
+
+        Handler handler = ListaFundoFragment.sUpdateHandler;
+        if (handler != null) {
+            handler.obtainMessage().sendToTarget();
+        }
+    }
+
+    private void loadCloudFundos() {
+        fundosPresenter.loadFundos();
+    }
+
+
 }

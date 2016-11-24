@@ -112,6 +112,7 @@ public class DetailsFragment extends Fragment {
             public void onClick(View v) {
                 mListener.deleteFundo(fundoEntity);
 
+
             }
         });
 

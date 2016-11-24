@@ -13,7 +13,7 @@
             android:id="@+id/menuAndroidBug"
             android:checked="false"
             android:icon="@drawable/ic_bug_report_black_48dp"
-            android:title="Android Bug" />
+            android:title="Programas" />
 
         <item
             android:id="@+id/menuCerrarSesion"
