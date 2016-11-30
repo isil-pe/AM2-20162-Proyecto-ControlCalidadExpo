@@ -39,6 +39,7 @@ public class UploadActivity extends AppCompatActivity implements EditVisitaView 
     private String mPath;
     private String accessToken=null;
     CRUDOperationsVisita crudvisita;
+
     String idvisita ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +54,36 @@ public class UploadActivity extends AppCompatActivity implements EditVisitaView 
         validateExtras();
         crudvisita = new CRUDOperationsVisita(new MyDatabase(this));
 
+        if (ContextCompat.checkSelfPermission(getBaseContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+
+            ActivityCompat.requestPermissions(UploadActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    14);
+
+        }
+
+        if(accessToken==null){
+            accessToken= Auth.getOAuth2Token();
+            if(accessToken!=null){
+                loadData();
+                launchFilePicker();
+            }
+            Log.v(TAG , "accessToken "+accessToken);
+            Auth.startOAuth2Authentication(UploadActivity.this, "svc2vr7355m1hos");
+        }
+
+
+
+
+
         btnLogInDropbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Auth.startOAuth2Authentication(UploadActivity.this, "svc2vr7355m1hos");
+
             }
         });
 
@@ -90,6 +117,7 @@ public class UploadActivity extends AppCompatActivity implements EditVisitaView 
             accessToken= Auth.getOAuth2Token();
             if(accessToken!=null){
                 loadData();
+                launchFilePicker();
             }
             Log.v(TAG , "accessToken "+accessToken);
         }
@@ -163,9 +191,10 @@ public class UploadActivity extends AppCompatActivity implements EditVisitaView 
             public void onUploadComplete(FileMetadata result) {
                 dialog.dismiss();
 
-                String message = result.getName() + " size " + result.getSize() + " modified " +
-                        DateFormat.getDateTimeInstance().format(result.getClientModified());
+              //  String message = result.getName() + " size " + result.getSize() + " modified " +
+                //        DateFormat.getDateTimeInstance().format(result.getClientModified());
 
+                 String message = result.getName();
 
                 VisitaEntity visita = crudvisita.getVisita(Integer.parseInt(idvisita));
                 visita.setEstado(message);
@@ -175,7 +204,7 @@ public class UploadActivity extends AppCompatActivity implements EditVisitaView 
 
                 Toast.makeText(UploadActivity.this, message, Toast.LENGTH_SHORT)
                         .show();
-
+                finish();
                 // Reload the folder
                 //loadData();
             }
