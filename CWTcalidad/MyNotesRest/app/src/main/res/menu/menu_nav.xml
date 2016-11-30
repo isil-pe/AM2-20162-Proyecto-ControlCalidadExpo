@@ -4,16 +4,16 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/menuAndroid"
+            android:id="@+id/menuFundos"
             android:checked="false"
             android:icon="@drawable/ic_android_black_48dp"
             android:title="Fundos" />
 
         <item
-            android:id="@+id/menuAndroidBug"
+            android:id="@+id/menuVisitas"
             android:checked="false"
             android:icon="@drawable/ic_bug_report_black_48dp"
-            android:title="Programas" />
+            android:title="Visitas" />
 
         <item
             android:id="@+id/menuCerrarSesion"

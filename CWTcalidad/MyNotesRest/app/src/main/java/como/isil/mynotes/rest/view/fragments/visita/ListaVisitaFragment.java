@@ -1,44 +1,40 @@
-package como.isil.mynotes.rest.view.fragments.fundo;
+package como.isil.mynotes.rest.view.fragments.visita;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
-
+import android.os.Handler;
 import com.isil.mynotes.rest.R;
 
 import java.util.List;
 
-import como.isil.mynotes.rest.FundoActivity;
-import como.isil.mynotes.rest.entity.FundoEntity;
-import como.isil.mynotes.rest.presenter.fundo.FundosView;
+import como.isil.mynotes.rest.VisitaActivity;
+import como.isil.mynotes.rest.entity.VisitaEntity;
+import como.isil.mynotes.rest.presenter.visita.VisitasView;
 import como.isil.mynotes.rest.storage.PreferencesHelper;
-import como.isil.mynotes.rest.storage.db.CRUDOperations;
+import como.isil.mynotes.rest.storage.db.CRUDOperationsVisita;
 import como.isil.mynotes.rest.storage.db.MyDatabase;
-import como.isil.mynotes.rest.utils.CapitalizeString;
-import como.isil.mynotes.rest.view.adapters.FundoAdapter;
+import como.isil.mynotes.rest.view.adapters.VisitaAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ListaFundoFragment.OnFragmentInteractionListener} interface
+ * {@link ListaVisitaFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ListaFundoFragment#newInstance} factory method to
+ * Use the {@link ListaVisitaFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListaFundoFragment extends Fragment {
+public class ListaVisitaFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -50,17 +46,19 @@ public class ListaFundoFragment extends Fragment {
 
 
 
-    private ListView lstFundos;
-    private List<FundoEntity> fundos;
-    private CRUDOperations crudOperations;
-    private FundoAdapter fundoAdapter;
+
+    private ListView lstVisitas;
+    private List<VisitaEntity> visitas;
+    private CRUDOperationsVisita crudOperations;
+    private VisitaAdapter visitaAdapter;
     private static final int ACTION_ADD = 1;
     private static final int ACTION_DETAIL = 2;
     public static Handler sUpdateHandler;
-    Button  btnAddFundo2;
+    Button btnAddVisita;
 
-    FundosView mlistener;
-    public ListaFundoFragment() {
+    VisitasView mlistener;
+
+    public ListaVisitaFragment() {
         // Required empty public constructor
     }
 
@@ -70,11 +68,11 @@ public class ListaFundoFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ListaFundoFragment.
+     * @return A new instance of fragment ListaVisitaFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ListaFundoFragment newInstance(String param1, String param2) {
-        ListaFundoFragment fragment = new ListaFundoFragment();
+    public static ListaVisitaFragment newInstance(String param1, String param2) {
+        ListaVisitaFragment fragment = new ListaVisitaFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -83,10 +81,10 @@ public class ListaFundoFragment extends Fragment {
     }
 
     private void loadData() {
-        crudOperations = new CRUDOperations(new MyDatabase(getView().getContext()));
-        fundos= crudOperations.getAllFundosNoEliminados();
-        fundoAdapter = new FundoAdapter(getView().getContext(),fundos);
-        lstFundos.setAdapter(fundoAdapter);
+        crudOperations = new CRUDOperationsVisita(new MyDatabase(getView().getContext()));
+        visitas= crudOperations.getAllVisitas();
+        visitaAdapter = new VisitaAdapter(getView().getContext(),visitas);
+        lstVisitas.setAdapter(visitaAdapter);
 
 
     }
@@ -99,31 +97,32 @@ public class ListaFundoFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
         sUpdateHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 // call you update method here.
 
-                loadData();
+loadData();
 
             }
         };
-
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-
+        Log.v("sync","list fragment create");
+        loadData();
     }
 
-
     private void init() {
-
-        lstFundos = (ListView)getView().findViewById(R.id.lstFundos);
-        btnAddFundo2 = (Button) getView().findViewById(R.id.btnAddfundo2);
+        Log.v("sync","init lista vista fragment");
+        //tviLogout = (TextView) findViewById(R.id.tviLogout);
+        //tviUser = (TextView) findViewById(R.id.tviUser);
+        lstVisitas = (ListView)getView().findViewById(R.id.lstVisitas);
+        btnAddVisita = (Button) getView().findViewById(R.id.btnAddvisita);
         //rlayLoading = (findViewById(R.id.rlayLoading));
 
         //user Info
@@ -133,18 +132,18 @@ public class ListaFundoFragment extends Fragment {
         }
 
         //events
-        btnAddFundo2.setOnClickListener(new View.OnClickListener() {
+        btnAddVisita.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gotoFundo(ACTION_ADD, null);
             }
         });
 
-        lstFundos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lstVisitas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                FundoEntity fundoEntity = (FundoEntity) adapterView.getAdapter().getItem(i);
-                gotoFundo(ACTION_DETAIL, fundoEntity);
+                VisitaEntity visitaEntity = (VisitaEntity) adapterView.getAdapter().getItem(i);
+                gotoFundo(ACTION_DETAIL, visitaEntity);
             }
         });
 
@@ -156,48 +155,40 @@ public class ListaFundoFragment extends Fragment {
         });*/
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_lista_fundo, container, false);
-    }
-
-    private void gotoFundo(int action, FundoEntity fundoEntity) {
-        Intent intent = new Intent(getView().getContext(), FundoActivity.class);
+    private void gotoFundo(int action, VisitaEntity visitaEntity) {
+        Intent intent = new Intent(getView().getContext(), VisitaActivity.class);
 
         switch (action) {
             case ACTION_ADD:
-                intent.putExtra("FRAGMENT", FundoActivity.ADD_FUNDO);
+                intent.putExtra("FRAGMENT", VisitaActivity.ADD_VISITA);
                 startActivity(intent);
                 break;
             case ACTION_DETAIL:
-                intent.putExtra("FRAGMENT", FundoActivity.DETAIL_FUNDO);
-                intent.putExtra("FUNDO", fundoEntity);
+                intent.putExtra("FRAGMENT", VisitaActivity.DETAIL_VISITA);
+                intent.putExtra("VISITA", visitaEntity);
                 startActivity(intent);
                 break;
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_lista_visita, container, false);
+    }
+
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         try {
-            mlistener = (FundosView) context ;
+            mlistener = (VisitasView) context ;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-       /* if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }*/
     }
 
     @Override

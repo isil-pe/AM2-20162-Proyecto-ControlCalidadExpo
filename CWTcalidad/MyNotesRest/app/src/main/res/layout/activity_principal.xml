@@ -20,6 +20,13 @@ tools:context="como.isil.mynotes.rest.PrincipalActivity">
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text=""
+            android:id="@+id/tvCountVisitas"
+            android:layout_gravity="left|center" />
     </FrameLayout>
     <include layout="@layout/layout_loading"/>
 </LinearLayout>

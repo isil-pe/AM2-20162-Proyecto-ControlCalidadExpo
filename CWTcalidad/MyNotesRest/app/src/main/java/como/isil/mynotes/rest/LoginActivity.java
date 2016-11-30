@@ -2,6 +2,8 @@ package como.isil.mynotes.rest;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -13,9 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.facebook.stetho.Stetho;
 import com.isil.mynotes.rest.R;
 
-import java.util.concurrent.ExecutionException;
+
 
 import como.isil.mynotes.rest.entity.UserEntity;
 import como.isil.mynotes.rest.presenter.LogInPresenter;
@@ -24,11 +27,10 @@ import como.isil.mynotes.rest.storage.PreferencesHelper;
 
 import como.isil.mynotes.rest.storage.db.CRUDOperationsUser;
 import como.isil.mynotes.rest.storage.db.MyDatabase;
-import como.isil.mynotes.rest.utils.OnSyncCload;
-import como.isil.mynotes.rest.utils.SyncCloud;
 
 
-public class LoginActivity extends ActionBarActivity implements LogInView , OnSyncCload {
+
+public class LoginActivity extends ActionBarActivity implements LogInView  {
 
     private Button btnLogin;
     private EditText eteUsername;
@@ -36,9 +38,9 @@ public class LoginActivity extends ActionBarActivity implements LogInView , OnSy
     private String username;
     private String password;
     private View rlayLoading,container;
-    OnSyncCload synclistener;
 
-    Boolean internet = false;
+
+
     private LogInPresenter logInPresenter;
     CRUDOperationsUser cruduser;
     @Override
@@ -46,11 +48,7 @@ public class LoginActivity extends ActionBarActivity implements LogInView , OnSy
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-      
-
-
-
+        Stetho.initializeWithDefaults(this);
         logInPresenter= new LogInPresenter();
         logInPresenter.attachedView(this);
         init();
@@ -69,14 +67,6 @@ public class LoginActivity extends ActionBarActivity implements LogInView , OnSy
         container=findViewById(R.id.container);
          cruduser= new CRUDOperationsUser(new MyDatabase(this));
 
-        try {
-            synclistener = (OnSyncCload) this;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(this.toString()
-                    + " must implement OnSyncCloadOnSyncCload");
-        }
-
-
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,7 +75,10 @@ public class LoginActivity extends ActionBarActivity implements LogInView , OnSy
 
 
 
-                    new SyncCloud(synclistener, getContext()).execute();
+
+                    login(isConnectingToInternet(getContext()));
+
+
 
 
                 }
@@ -102,7 +95,7 @@ public class LoginActivity extends ActionBarActivity implements LogInView , OnSy
 
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                     if (validateForm()) {
-                       // logInPresenter.logIn(username,password);
+                        login(isConnectingToInternet(getContext()));
                     }
                 }
                 return false;
@@ -115,6 +108,19 @@ public class LoginActivity extends ActionBarActivity implements LogInView , OnSy
         savePreferences();
        Intent intent= new Intent(this,PrincipalActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean isConnectingToInternet(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+
     }
 
     private void savePreferences() {
@@ -162,6 +168,9 @@ public class LoginActivity extends ActionBarActivity implements LogInView , OnSy
 
     @Override
     public void hideLoading() {
+
+
+
         this.rlayLoading.setVisibility(View.GONE);
     }
 
@@ -179,29 +188,13 @@ public class LoginActivity extends ActionBarActivity implements LogInView , OnSy
     }
 
 
-    @Override
-    public void onPreExecute() {
-        showLoading();
-    }
-
-    @Override
-    public void onProgressUpdate(String... text) {
-
-    }
-
-    @Override
-    public void onPostExecute(String result) {
-        internet = Boolean.parseBoolean(result);
-
-login();
 
 
 
-    }
 
-    public void login(){
+    public void login(boolean internet){
         if(internet){
-hideLoading();
+
             logInPresenter.logIn(username,password);
 
         }else{

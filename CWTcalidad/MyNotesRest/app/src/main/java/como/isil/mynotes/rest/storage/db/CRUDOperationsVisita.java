@@ -22,7 +22,7 @@ public class CRUDOperationsVisita {
         helper =(MyDatabase)_helper;
     }
 
-    public void addVisita(VisitaEntity visitaEntity)
+    public long addVisita(VisitaEntity visitaEntity)
     {
         SQLiteDatabase db = helper.getWritableDatabase(); //modo escritura
         ContentValues values = new ContentValues();
@@ -34,11 +34,15 @@ public class CRUDOperationsVisita {
         values.put(MyDatabase.KEY_FECHAVISITA, visitaEntity.getFecvisita());
         values.put(MyDatabase.KEY_CONTENEDOR, visitaEntity.getContenedor());
         values.put(MyDatabase.KEY_COMENTARIO, visitaEntity.getComentario());
+        values.put(MyDatabase.KEY_ESTADO_VISITA, visitaEntity.getEstado());
+        values.put(MyDatabase.KEY_OBJECTID_VISITA, visitaEntity.getObjectId());
 
 
 
-        db.insert(MyDatabase.TABLE_VISITAS, null, values);
+       long id = db.insert(MyDatabase.TABLE_VISITAS, null, values);
         db.close();
+
+        return id;
     }
 
     public VisitaEntity getVisita(int id)
@@ -53,26 +57,37 @@ public class CRUDOperationsVisita {
                         MyDatabase.KEY_FECHAVISITA,
                         MyDatabase.KEY_CONTENEDOR,
                         MyDatabase.KEY_COMENTARIO,
+                        MyDatabase.KEY_ESTADO_VISITA,
+                        MyDatabase.KEY_SINCRO_VISITA,
+                        MyDatabase.KEY_OBJECTID_VISITA,
 
                 },
                 MyDatabase.KEY_IDVISITA + "=?",
                 new String[]{String.valueOf(id)}, null, null, null);
-        if(cursor!=null)
+        if(cursor!=null && cursor.getCount()>0)
         {
             cursor.moveToFirst();
+
+            int vid = Integer.parseInt(cursor.getString(0));
+            String semana = cursor.getString(1);
+            String idfundovisita = cursor.getString(2);
+            String idcalvisita = cursor.getString(3);
+            String fechavisita = cursor.getString(4);
+            String contenedor = cursor.getString(5);
+            String comentario = cursor.getString(6);
+            String estado = cursor.getString(7);
+            String sincro = cursor.getString(8);
+            String objectid = cursor.getString(9);
+            VisitaEntity visitaEntity= new VisitaEntity(
+                    vid, semana, idfundovisita, idcalvisita, fechavisita,contenedor,comentario, estado, sincro, objectid);
+
+            return visitaEntity;
         }
-        int vid = Integer.parseInt(cursor.getString(0));
-        String semana = cursor.getString(1);
-        String idfundovisita = cursor.getString(2);
-        String idcalvisita = cursor.getString(3);
-        String fechavisita = cursor.getString(4);
-        String contenedor = cursor.getString(5);
-        String comentario = cursor.getString(6);
 
 
-        VisitaEntity visitaEntity= new VisitaEntity(
-                vid, semana, idfundovisita, idcalvisita, fechavisita,contenedor,comentario);
-        return visitaEntity;
+
+
+        return null;
     }
 
     public List<VisitaEntity> getAllVisitas()
@@ -93,7 +108,9 @@ public class CRUDOperationsVisita {
                 visitaEntity.setFecvisita(cursor.getString(4));
                 visitaEntity.setContenedor(cursor.getString(5));
                 visitaEntity.setComentario(cursor.getString(6));
-
+                visitaEntity.setEstado(cursor.getString(7));
+                visitaEntity.setSincro(cursor.getString(8));
+                visitaEntity.setObjectId(cursor.getString(9));
 
                 lst.add(visitaEntity);
             }while(cursor.moveToNext());
@@ -106,9 +123,10 @@ public class CRUDOperationsVisita {
         String sql= "SELECT * FROM "+MyDatabase.TABLE_VISITAS;
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
+        int count = cursor.getCount();
         cursor.close();
 
-        return cursor.getCount();
+        return count;
     }
 
     //--------------------------------------------
@@ -124,7 +142,9 @@ public class CRUDOperationsVisita {
         values.put(MyDatabase.KEY_FECHAVISITA, visitaEntity.getFecvisita());
         values.put(MyDatabase.KEY_CONTENEDOR,visitaEntity.getContenedor());
         values.put(MyDatabase.KEY_COMENTARIO, visitaEntity.getComentario());
-
+        values.put(MyDatabase.KEY_ESTADO_VISITA, visitaEntity.getEstado());
+        values.put(MyDatabase.KEY_SINCRO_VISITA, visitaEntity.getSincro());
+        values.put(MyDatabase.KEY_OBJECTID_VISITA, visitaEntity.getObjectId());
 
         return db.update(MyDatabase.TABLE_VISITAS,
                 values,
@@ -141,6 +161,27 @@ public class CRUDOperationsVisita {
                 new String[]{String.valueOf(visitaEntity.getIdvisita())});
         db.close();
         return row;
+    }
+
+    public int getVisitaContenedor(String contenedor) {
+        SQLiteDatabase db = helper.getReadableDatabase(); //modo lectura
+
+
+        String sql = "SELECT * FROM " + MyDatabase.TABLE_VISITAS+" WHERE "+MyDatabase.KEY_CONTENEDOR+"='"+contenedor+"'";
+
+        Cursor cursor = db.rawQuery(sql, null);
+
+
+
+
+
+        if (cursor != null && cursor.getCount()>0) {
+            return cursor.getCount();
+        }
+
+
+return 0;
+
     }
     
 }

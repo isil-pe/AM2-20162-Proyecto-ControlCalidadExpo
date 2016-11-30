@@ -34,6 +34,10 @@ public class MyDatabase extends SQLiteOpenHelper {
 	public static final String KEY_FECHAVISITA = "fecvisita";
 	public static final String KEY_CONTENEDOR = "contenedor";
 	public static final String KEY_COMENTARIO = "comentario";
+	public static final String KEY_ESTADO_VISITA = "estadovisita";
+	public static final String KEY_SINCRO_VISITA = "sincrovisita";
+    public static final String KEY_OBJECTID_VISITA = "objectidvisita";
+
 
 	//Columnas de la Tabla User
 
@@ -87,7 +91,11 @@ public class MyDatabase extends SQLiteOpenHelper {
 				+ KEY_IDCAL_VISITA + " TEXT,"
 				+ KEY_FECHAVISITA + " TEXT,"
 				+ KEY_CONTENEDOR + " TEXT,"
-				+ KEY_COMENTARIO + " TEXT"
+				+ KEY_COMENTARIO + " TEXT,"
+				+ KEY_ESTADO_VISITA + " TEXT,"
+				+ KEY_SINCRO_VISITA + " TEXT,"
+                + KEY_OBJECTID_VISITA + " TEXT"
+
 				+ ")";
 		db.execSQL(sqlvisita);
 	}

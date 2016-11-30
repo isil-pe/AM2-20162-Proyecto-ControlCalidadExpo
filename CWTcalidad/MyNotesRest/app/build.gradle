@@ -22,6 +22,20 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
+    //RETROFIT https://github.com/square/retrofit
+    //compile 'com.squareup.retrofit:retrofit:1.9.0'
+
+    //GSON https://github.com/google/gson
+    //compile 'com.google.code.gson:gson:2.6.2'
+
+    //INTERCEPTOR
+
+    //OKHTTP
+    //compile 'com.squareup.okhttp:okhttp:2.5.0'
+
+    //DROPBOX
+    compile 'com.dropbox.core:dropbox-core-sdk:2.1.2'
+
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:design:23.4.0'
@@ -32,21 +46,4 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
     compile 'com.facebook.stetho:stetho:1.4.1'
     compile 'com.facebook.stetho:stetho-okhttp3:1.4.1'
-
-
-    //RETROFIT https://github.com/square/retrofit
-    //compile 'com.squareup.retrofit:retrofit:1.9.0'
-    
-
-    //GSON https://github.com/google/gson
-    //compile 'com.google.code.gson:gson:2.6.2'
-    
-    //INTERCEPTOR
-    
-    //OKHTTP
-    //compile 'com.squareup.okhttp:okhttp:2.5.0'
-
-    
-    
-
 }

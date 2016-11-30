@@ -17,7 +17,7 @@ import android.widget.EditText;
 import com.isil.mynotes.rest.R;
 
 
-import como.isil.mynotes.rest.MainActivity;
+
 import como.isil.mynotes.rest.entity.FundoEntity;
 import como.isil.mynotes.rest.presenter.fundo.AddFundoView;
 import como.isil.mynotes.rest.presenter.fundo.FundoPresenter;

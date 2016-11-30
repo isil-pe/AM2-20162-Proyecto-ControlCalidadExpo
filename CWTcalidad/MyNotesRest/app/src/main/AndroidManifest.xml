@@ -13,12 +13,6 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="como.isil.mynotes.rest.MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait">
-
-        </activity>
-        <activity
             android:name="como.isil.mynotes.rest.SplashActivity"
             android:label="@string/title_activity_splash"
             android:screenOrientation="portrait">
@@ -27,8 +21,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
         </activity>
         <activity
             android:name="como.isil.mynotes.rest.LoginActivity"
@@ -38,14 +30,30 @@
             android:name="como.isil.mynotes.rest.FundoActivity"
             android:label="@string/title_activity_note"
             android:screenOrientation="portrait" />
-        <activity android:name="como.isil.mynotes.rest.PruebaActivity">
+        <activity android:name="como.isil.mynotes.rest.PruebaActivity"></activity>
+        <activity
+            android:name="como.isil.mynotes.rest.PrincipalActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NavAppTheme"></activity>
+        <activity android:name="como.isil.mynotes.rest.VisitaActivity" />
+        <activity android:name="como.isil.mynotes.rest.UploadActivity">
 
 
         </activity>
-        <activity android:name="como.isil.mynotes.rest.PrincipalActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NavAppTheme"
-            >
+        <activity
+            android:name="com.dropbox.core.android.AuthActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask" >
+            <intent-filter>
+
+                <!-- Change this to be db- followed by your app key -->
+                <data android:scheme="db-svc2vr7355m1hos" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 

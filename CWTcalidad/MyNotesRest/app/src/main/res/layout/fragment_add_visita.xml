@@ -1,0 +1,66 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="como.isil.mynotes.rest.view.fragments.visita.AddVisitaFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="5dp"
+        android:orientation="vertical">
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Semana del año"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/txtSemana" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Fundo"
+            android:lines="1"
+            android:id="@+id/txtFundo" />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Calificacion"
+            android:lines="1"
+            android:id="@+id/txtCalificacion" />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Fecha"
+            android:lines="1"
+            android:id="@+id/txtFecha" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contenedor"
+            android:lines="1"
+            android:id="@+id/txtCont" />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Comentario"
+            android:lines="2"
+            android:id="@+id/txtComentario" />
+
+
+    </LinearLayout>
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:background="#D5EDED"
+        android:text="Agregar"
+        android:id="@+id/btnAddVis"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

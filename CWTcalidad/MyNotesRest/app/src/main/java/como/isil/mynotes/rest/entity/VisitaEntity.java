@@ -7,14 +7,32 @@ import java.io.Serializable;
  */
 public class VisitaEntity implements Serializable {
 
-    int idvisita;
-    String semana;
-    String idfundo;
-    String idcalificacion;
-    String fecvisita;
-    String contenedor;
-    String comentario;
+    private int idvisita;
+    private String semana;
+    private String idfundo;
+    private String idcalificacion;
+    private String fecvisita;
+    private String contenedor;
+    private String comentario;
     private String objectId;
+    private String estado;
+    private String sincro;
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getSincro() {
+        return sincro;
+    }
+
+    public void setSincro(String sincro) {
+        this.sincro = sincro;
+    }
 
     public int getIdvisita() {
         return idvisita;
@@ -83,7 +101,7 @@ public class VisitaEntity implements Serializable {
     public VisitaEntity() {
     }
 
-    public VisitaEntity(int idvisita, String semana, String idfundo, String idcalificacion, String fecvisita, String contenedor, String comentario) {
+    public VisitaEntity(int idvisita, String semana, String idfundo, String idcalificacion, String fecvisita, String contenedor, String comentario, String objectId, String estado, String sincro) {
         this.idvisita = idvisita;
         this.semana = semana;
         this.idfundo = idfundo;
@@ -91,16 +109,21 @@ public class VisitaEntity implements Serializable {
         this.fecvisita = fecvisita;
         this.contenedor = contenedor;
         this.comentario = comentario;
-
+        this.objectId = objectId;
+        this.estado = estado;
+        this.sincro = sincro;
     }
 
-    public VisitaEntity(String semana, String idfundo, String idcalificacion, String fecvisita, String contenedor, String comentario) {
+    public VisitaEntity(String semana, String idfundo, String idcalificacion, String fecvisita, String contenedor, String comentario, String objectId, String estado, String sincro) {
         this.semana = semana;
         this.idfundo = idfundo;
         this.idcalificacion = idcalificacion;
         this.fecvisita = fecvisita;
         this.contenedor = contenedor;
         this.comentario = comentario;
+        this.objectId = objectId;
+        this.estado = estado;
+        this.sincro = sincro;
     }
 
     @Override
@@ -113,6 +136,8 @@ public class VisitaEntity implements Serializable {
                 ", contenedor'" + contenedor + '\'' +
                 ", comentario'" + comentario + '\'' +
                 ", objectId'" + objectId + '\'' +
+                ", estado'" + objectId + '\'' +
+                ", sincro'" + objectId + '\'' +
                 '}';
     }
 

@@ -91,10 +91,13 @@ public class LogInPresenter {
             userEntity.setObjectId(loginResponse.getObjectId());
             userEntity.setToken(loginResponse.getToken());
         }
+
         logInView.hideLoading();
         logInView.gotoMain();
     }
     public void loginError(String messageError){
+
+
         logInView.hideLoading();
         logInView.onMessageError(messageError);
     }

@@ -13,4 +13,6 @@ public interface LogInView {
 
     void onMessageError(String message);
     void gotoMain();
+
+    boolean isConnectingToInternet(Context context);
 }
