@@ -13,4 +13,5 @@ public interface EditVisitaView {
 
     void onMessageError(String message);
     void editVisitaSuccess();
+    boolean isConnectingToInternet(Context context);
 }

@@ -5,12 +5,21 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +28,7 @@ import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.users.FullAccount;
 import com.isil.mynotes.rest.R;
 
+import java.io.File;
 import java.text.DateFormat;
 
 import como.isil.mynotes.rest.entity.VisitaEntity;
@@ -39,8 +49,11 @@ public class UploadActivity extends AppCompatActivity implements EditVisitaView 
     private String mPath;
     private String accessToken=null;
     CRUDOperationsVisita crudvisita;
-
+    private ImageView ivifotoVisita;
     String idvisita ;
+    String pathFotosubida;
+    Uri selectedImageUri;
+    String contenedor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +63,10 @@ public class UploadActivity extends AppCompatActivity implements EditVisitaView 
         tviName= (TextView) findViewById(R.id.tviName);
         tviEmail= (TextView) findViewById(R.id.tviEmail);
         tviType= (TextView) findViewById(R.id.tviType);
-
+            btnLogInDropbox.setVisibility(View.GONE);
         validateExtras();
+
+        ivifotoVisita = (ImageView) findViewById(R.id.iviFotoVisita);
         crudvisita = new CRUDOperationsVisita(new MyDatabase(this));
 
         if (ContextCompat.checkSelfPermission(getBaseContext(),
@@ -69,7 +84,7 @@ public class UploadActivity extends AppCompatActivity implements EditVisitaView 
             accessToken= Auth.getOAuth2Token();
             if(accessToken!=null){
                 loadData();
-                launchFilePicker();
+
             }
             Log.v(TAG , "accessToken "+accessToken);
             Auth.startOAuth2Authentication(UploadActivity.this, "svc2vr7355m1hos");
@@ -117,7 +132,7 @@ public class UploadActivity extends AppCompatActivity implements EditVisitaView 
             accessToken= Auth.getOAuth2Token();
             if(accessToken!=null){
                 loadData();
-                launchFilePicker();
+
             }
             Log.v(TAG , "accessToken "+accessToken);
         }
@@ -141,8 +156,14 @@ public class UploadActivity extends AppCompatActivity implements EditVisitaView 
                 String type= result.getAccountType().name();
                 tviName.setText("Name "+name );
                 tviEmail.setText("Email "+email);
-                tviType.setText("Type "+type);
-            }
+                tviType.setText("Foto para el Contenedor: "+contenedor);
+
+
+
+                }
+
+
+
 
             @Override
             public void onError(Exception e) {
@@ -151,11 +172,26 @@ public class UploadActivity extends AppCompatActivity implements EditVisitaView 
         }).execute();
     }
 
+    public String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
     private void validateExtras() {
         if(getIntent().getExtras()!=null)
         {
             idvisita= getIntent().getStringExtra("EXTRA_ID_VISITA");
-
+            contenedor = getIntent().getStringExtra("EXTRA_ID_CONTENEDO");
         }
     }
     private void launchFilePicker() {
@@ -174,6 +210,8 @@ public class UploadActivity extends AppCompatActivity implements EditVisitaView 
         if (requestCode == PICKFILE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 // This is the result of a call to launchFilePicker
+                selectedImageUri = data.getData();
+                pathFotosubida = getRealPathFromURI(this, selectedImageUri);
                 uploadFile(data.getData().toString());
             }
         }
@@ -194,17 +232,20 @@ public class UploadActivity extends AppCompatActivity implements EditVisitaView 
               //  String message = result.getName() + " size " + result.getSize() + " modified " +
                 //        DateFormat.getDateTimeInstance().format(result.getClientModified());
 
-                 String message = result.getName();
+
+                String message = result.getName();
 
                 VisitaEntity visita = crudvisita.getVisita(Integer.parseInt(idvisita));
-                visita.setEstado(message);
+                visita.setEstado(pathFotosubida);
                 crudvisita.updateVisita(visita);
 
 
 
                 Toast.makeText(UploadActivity.this, message, Toast.LENGTH_SHORT)
                         .show();
-                finish();
+                ivifotoVisita.setImageURI(null);
+                ivifotoVisita.setImageURI(selectedImageUri);
+
                 // Reload the folder
                 //loadData();
             }
@@ -245,5 +286,16 @@ public class UploadActivity extends AppCompatActivity implements EditVisitaView 
     @Override
     public void editVisitaSuccess() {
 
+    }
+
+    @Override
+    public boolean isConnectingToInternet(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
     }
 }

@@ -217,7 +217,7 @@ public class PrincipalActivity extends AppCompatActivity implements OnNavListene
 
             int cant  = crudOperations.getVisitaContenedor(visita1.getContenedor());
             if(cant==0){
-                visita1.setEstado("NO");
+
                 visita1.setSincro("SI");
                 crudOperations.addVisita(visita1);
             }

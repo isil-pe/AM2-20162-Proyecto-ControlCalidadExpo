@@ -170,6 +170,7 @@ public class DetailsVisitaFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent= new Intent(getContext(),UploadActivity.class);
                 intent.putExtra("EXTRA_ID_VISITA", String.valueOf(visitaEntity.getIdvisita()));
+                intent.putExtra("EXTRA_ID_CONTENEDO", String.valueOf(visitaEntity.getContenedor()));
                 startActivity(intent);
 
             }

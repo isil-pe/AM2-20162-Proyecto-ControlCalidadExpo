@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,23 +48,10 @@ public class CRUDOperationsVisita {
 
     public VisitaEntity getVisita(int id)
     {
+        String sql= "SELECT  * FROM " + MyDatabase.TABLE_VISITAS+" WHERE "+MyDatabase.KEY_IDVISITA+"="+"'"+id+"'";
         SQLiteDatabase db = helper.getReadableDatabase(); //modo lectura
-        Cursor cursor = db.query(MyDatabase.TABLE_VISITAS,
-                new String[]{
-                        MyDatabase.KEY_IDVISITA,
-                        MyDatabase.KEY_SEMANAVISITA,
-                        MyDatabase.KEY_IDFUNDO_VISITA,
-                        MyDatabase.KEY_IDCAL_VISITA,
-                        MyDatabase.KEY_FECHAVISITA,
-                        MyDatabase.KEY_CONTENEDOR,
-                        MyDatabase.KEY_COMENTARIO,
-                        MyDatabase.KEY_ESTADO_VISITA,
-                        MyDatabase.KEY_SINCRO_VISITA,
-                        MyDatabase.KEY_OBJECTID_VISITA,
-
-                },
-                MyDatabase.KEY_IDVISITA + "=?",
-                new String[]{String.valueOf(id)}, null, null, null);
+VisitaEntity visita = new VisitaEntity();
+        Cursor cursor = db.rawQuery(sql, null);
         if(cursor!=null && cursor.getCount()>0)
         {
             cursor.moveToFirst();
@@ -80,14 +68,13 @@ public class CRUDOperationsVisita {
             String objectid = cursor.getString(9);
             VisitaEntity visitaEntity= new VisitaEntity(
                     vid, semana, idfundovisita, idcalvisita, fechavisita,contenedor,comentario, estado, sincro, objectid);
-
-            return visitaEntity;
+            Log.v("sync","no encontro visita");
+            visita = visitaEntity;
         }
 
 
-
-
-        return null;
+        Log.v("sync","no encontro visita");
+        return visita;
     }
 
     public List<VisitaEntity> getAllVisitas()

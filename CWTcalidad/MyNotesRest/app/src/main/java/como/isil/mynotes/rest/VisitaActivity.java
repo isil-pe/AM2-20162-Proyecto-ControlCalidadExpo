@@ -148,7 +148,10 @@ public class VisitaActivity extends ActionBarActivity implements OnVisitaListene
 
     @Override
     public void showMessage(String message) {
+        Snackbar snackbar = Snackbar
+                .make(container, message+" Visita Activity", Snackbar.LENGTH_LONG);
 
+        snackbar.show();
     }
 
     @Override
@@ -158,7 +161,7 @@ public class VisitaActivity extends ActionBarActivity implements OnVisitaListene
         if(auxVisitaEntity!=null)
         {
             //eliminar
-            auxVisitaEntity.setEstado("ELIMINADO");
+
             auxVisitaEntity.setSincro(crudOperations.getVisita(auxVisitaEntity.getIdvisita()).getSincro());
 
             crudOperations.deleteVisita(auxVisitaEntity);
