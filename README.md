@@ -3,7 +3,7 @@
 ## Nombre del proyecto "Control de Calidad"
 
 ## Integrantes
-Fabricio Arbulu,
+Fabricio Arbulu, 
 Marco Muñoz
 
 
