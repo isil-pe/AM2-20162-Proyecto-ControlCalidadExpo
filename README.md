@@ -41,3 +41,4 @@ String	comentario |
  
 ## Diagrama
 
+![](https://github.com/isil-pe/AM2-20162-Proyecto-ControlCalidadExpo/blob/master/Imagen1.png)
